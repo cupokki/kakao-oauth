@@ -1,0 +1,9 @@
+spring:
+    application:
+        name: kakao-auth
+
+    datasource:
+      driver-class-name: org.h2.Driver
+      url: "jdbc:mem:kakaoauth_db"
+      username: sa
+      password:

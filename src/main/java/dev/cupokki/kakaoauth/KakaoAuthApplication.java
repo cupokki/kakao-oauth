@@ -1,4 +1,4 @@
-package dev.cupokki.kakao_auth;
+package dev.cupokki.kakaoauth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
