@@ -1,0 +1,132 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>카카오 로그인 테스트</title>
+        <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            main {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            form {
+                margin: 10px;
+                padding: 36px 24px;
+                border: lightgray solid 1px;
+                box-shadow: 0 4px 6px lightgray;
+                border-radius:1em;
+                width: 300px;
+                display: flex;
+                flex-direction: column;
+            }
+            form > * {
+                margin: 4 2;
+                border-radius:1em;
+            }
+            input{
+                padding: 8px;
+                border: lightgray solid 1px;
+            }
+
+            form > div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            #submit {
+                margin: 12px 0 0 0;
+                padding: 10px;
+                border-radius:1em;
+                color: white;
+                background-color: darkgray;
+                border: none;
+                cursor: pointer;
+            }
+
+            #error {
+                margin: 12px 0 0 0;
+                text-align: center;
+                color: red;
+            }
+            
+        </style>
+            
+        </script>
+    </head>
+    <body>
+    <main>
+        <h1> 회원가입 </h1>
+        <form id="signupForm">
+            <input id="code" name=code hidden="true"> 
+            <div>
+                <label for="username">아이디 </label>
+                <input id="username" name="username"/>
+            </div>
+            <div>
+                <label for="email">이메일 </label>
+                <input id="email" name="email"/>
+            </div>
+            <div>
+                <label for="password"> 비밀번호 </label>
+                <input type="password" id="password" name="password"/>
+            </div>
+            <div>
+                <label for="confirmPassword"> 확인 비밀번호 </label>
+                <input type="password" id="confirmPassword" name="confirmPassword"/>
+                <!-- <div>확인 비밀번호가 일치하지 않습니다</div> -->
+            </div>
+            <span id="error"></span>
+            <input id="submit" type="submit" value="가입하기" disabled/>
+        </form>
+    </main>
+    </body>
+    <script>
+        function verifyForm() {
+            const username = document.getElementById("username").value
+            const email = document.getElementById("email").value
+            const password = document.getElementById("password").value
+            const confirmPassword = document.getElementById("confirmPassword").value
+            return email != '' & password != '' & verifyConfirmPassword()
+        }
+
+        function verifyConfirmPassword() {
+            const password = document.getElementById("password").value
+            const confirmPassword = document.getElementById("confirmPassword").value
+            console.log(password, "-", confirmPassword)
+            return password != '' & confirmPassword != '' & confirmPassword == password
+        } 
+        function passwordhandler() {
+            if(verifyConfirmPassword()) {
+                document.getElementById("submit").disabled=false
+                document.getElementById("submit").style.backgroundColor="midnightblue"
+                console.log("같음")
+            } else {
+                // document.getElementById()
+                document.getElementById("submit").disabled=true
+                document.getElementById("submit").style.backgroundColor="darkgray"
+                console.log("다름")
+            }
+        }
+
+        document.getElementById("signupForm").addEventListener("submit", async (e) => {
+            e.preventDefault()
+            try{
+
+                window.location.href = "index.html"
+            } catch (err) {
+                document.getElementById("error").value = err
+            }
+            
+        })
+
+        document.getElementById("password").addEventListener("keyup", passwordhandler)
+        document.getElementById("confirmPassword").addEventListener("keyup", passwordhandler)
+
+    </script>

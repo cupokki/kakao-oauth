@@ -1,0 +1,64 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>카카오 로그인 테스트</title>
+        <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            main {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .spinner {
+                width: 64px;
+                height: 64px;
+                font-size: 10rem;
+                animation: spin 1.5s linear infinite;
+            }
+
+            @keyframes spin{
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+        </style>
+            
+        </script>
+    </head>
+    <body>
+    <main>
+        <h1>Wait for seconds</h1>
+        <svg class="spinner" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="refresh-icon">
+            <path d="M23 4v6h-6"/>
+            <path d="M1 20v-6h6"/>
+            <path d="M3.51 9a9 9 0 0114.13-3.36L23 10"/>
+            <path d="M20.49 15a9 9 0 01-14.13 3.36L1 14"/>
+          </svg>
+          
+    </main>
+    </body>
+    <script>
+        try {
+            Kakao.init("541caa8871f27587293ff4226b4885fd");
+            // request code 
+            const res = await fetch("", {
+
+
+        })
+            // let code = res.data.code
+            
+        } catch (err){
+            console.log()
+        }
+    </script>
+</html>
+

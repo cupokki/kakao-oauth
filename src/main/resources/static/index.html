@@ -1,0 +1,65 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title>카카오 로그인 테스트</title>
+        <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+            }
+            main {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            img {
+                width: 200px;
+                height: 200px;
+            }
+
+            .container {
+                visibility: hidden;
+            }
+
+            p {
+                text-align: center;
+            }
+
+            a {
+                display: block;
+                text-align: center;
+                margin: 4px;
+            }
+
+        </style>
+            
+        </script>
+    </head>
+    <body>
+    <main>
+        <h1> 메인 </h1>
+        <div>
+            <p>로그인 성공!</p>
+            <img src="https://i.imgur.com/hQhVgmY.jpeg" alt="image">
+            <a id="logout" href="">로그아웃</a>
+        </div>
+        
+    </main>
+    </body>
+    <script>
+        if (localStorage.getItem("accessToken") == null) {
+            const redirectUrl = encodeURIComponent(window.location.href);
+            window.location.href = `login.html?redirect=${redirectUrl}`;
+        } 
+        document.getElementById("container").style.visibility = 'visible'
+        document.getElementById("logout").addEventListener("click", async (e) => {
+            e.preventDefault()
+
+            alert("logout")
+        })
+    </script>
