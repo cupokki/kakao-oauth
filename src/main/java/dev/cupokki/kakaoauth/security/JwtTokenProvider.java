@@ -42,19 +42,20 @@ public class JwtTokenProvider implements AuthenticationProvider {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        var principal = userDetailsService.loadUserByUsername(authentication.getCredentials().toString());
-        return new JwtAuthenticationToken(null);
+        var userId  = extractClaims((String) authentication.getCredentials()).getSubject();
+        var principal = userDetailsService.loadUserByUsername(userId);
+        return new JwtAuthenticationToken(principal.getAuthorities(), (User)principal);
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+        return JwtAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

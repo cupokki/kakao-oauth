@@ -48,12 +48,16 @@
     </body>
     <script>
         try {
+            const domain = window.location.origin;
             Kakao.init("541caa8871f27587293ff4226b4885fd");
+            Kakao.Auth.authorize({
+              redirectUri: `${domain}/redirect`,
+            });
             // request code 
-            const res = await fetch("", {
+            // const res = await fetch("", {
 
 
-        })
+        // })
             // let code = res.data.code
             
         } catch (err){
