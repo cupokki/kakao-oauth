@@ -11,6 +11,6 @@ public class UserLoginRequest {
     private String username;
     private String password;
     private SocialType socialType;
-    private String socialId;
+    private String code;
     private Boolean isLongTerm;
 }

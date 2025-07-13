@@ -2,12 +2,14 @@ package dev.cupokki.kakaoauth.service;
 
 import dev.cupokki.kakaoauth.dto.UserLoginRequest;
 import dev.cupokki.kakaoauth.dto.UserSignupRequest;
+import dev.cupokki.kakaoauth.entity.SocialType;
 import dev.cupokki.kakaoauth.entity.User;
 import dev.cupokki.kakaoauth.repository.UserRepository;
 import dev.cupokki.kakaoauth.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +46,13 @@ public class AuthService {
                 .build());
 
         return jwtTokenProvider.generate(savedUser.getId());
+    }
+
+    public String socialLogin(UserLoginRequest userLoginRequest) {
+        switch(userLoginRequest.getSocialType()) {
+            case SocialType.KAKAO:
+            default:
+        }
+        return "dummy";
     }
 }

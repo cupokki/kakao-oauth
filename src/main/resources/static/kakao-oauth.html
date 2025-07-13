@@ -47,22 +47,38 @@
     </main>
     </body>
     <script>
-        try {
-            const domain = window.location.origin;
-            Kakao.init("541caa8871f27587293ff4226b4885fd");
-            Kakao.Auth.authorize({
-              redirectUri: `${domain}/redirect`,
-            });
-            // request code 
-            // const res = await fetch("", {
+        const params = new URLSearchParams(window.location.search)
+        const code = params.get("code")
+        console.log(code)
 
-
-        // })
-            // let code = res.data.code
-            
-        } catch (err){
-            console.log()
+        async function send() {
+            try {
+            const res = await fetch("http://localhost:8080/api/v1/auth/social-login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    socialType: "KAKAO",
+                    code: code
+                }) 
+            })
+            const data = await res.json()
+            console.log(res)
+            if (res.status == 204) {
+                log.info("연동된 계정이 없습니다. 회원가입을 수행합니다.")
+                // 고유ID와 소셜 타입을 회원가입 페이지에 전달
+            } else if(res.ok) {
+                // 로그인 성공
+                localStorage.setItem("accessToken", data.accessToken)
+                window.location.href = "./index.html"
+            }
+        } catch (err) {
+            console.log(err)
+            alert(err)
         }
+        }
+        send()
+        
+        
     </script>
 </html>
 

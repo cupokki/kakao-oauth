@@ -135,8 +135,22 @@
                 console.log(err);
             }
         })
+        function kakaoLogin() {
+            try {
+            const domain = window.location.origin;
+            Kakao.init("541caa8871f27587293ff4226b4885fd");
+            Kakao.Auth.authorize({
+              redirectUri: `${domain}/kakao-oauth.html`,
+            });
+            } catch (err){
+                console.log()
+            }
+        }
+
         document.getElementById("kakao-login-btn").addEventListener("click", async (e) => {
             e.preventDefault()
-            window.location.href = "./kakao-oauth.html"
+            kakaoLogin()
+            // window.location.href = "./kakao-oauth.html"
         })
+
     </script>
