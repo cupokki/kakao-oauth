@@ -1,5 +1,6 @@
 package dev.cupokki.kakaoauth.controller;
 
+import com.nimbusds.jose.JOSEException;
 import dev.cupokki.kakaoauth.dto.UserLoginRequest;
 import dev.cupokki.kakaoauth.dto.UserSignupRequest;
 import dev.cupokki.kakaoauth.service.AuthService;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Map;
 
 @RestController
@@ -35,7 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/social-login")
-    public ResponseEntity<?> socialLogin(@RequestBody UserLoginRequest userLoginRequest) {
+    public ResponseEntity<?> socialLogin(@RequestBody UserLoginRequest userLoginRequest) throws ParseException, IOException, JOSEException {
         var accessToken = authService.socialLogin(userLoginRequest);
         return ResponseEntity.ok(Map.of("accessToken", accessToken));
     }

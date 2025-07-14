@@ -41,6 +41,10 @@ dependencies {
 
 	//swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+	//jwks
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.37'
+
 }
 
 tasks.named('test') {
