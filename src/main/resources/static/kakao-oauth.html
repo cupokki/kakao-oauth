@@ -61,22 +61,23 @@
                     code: code
                 }) 
             })
-            if (res.status == 204) {
+            const data = await res.json()
+            if (!data.isRegistered) {
                 console.log("연동된 계정이 없습니다. 회원가입을 수행합니다.")
                 // 고유ID와 소셜 타입을 회원가입 페이지에 전달
+                sessionStorage.setItem("socialType", data.socialType)
+                sessionStorage.setItem("socialId", data.socialId)
+                window.location.href = "./signup.html"
             } else if(res.ok) {
                 // 로그인 성공
-                const data = await res.json()
                 localStorage.setItem("accessToken", data.accessToken)
                 window.location.href = "./index.html"
             }
             
-            console.log(res)
-            
-        } catch (err) {
-            console.log(err)
-            alert(err)
-        }
+            } catch (err) {
+                console.log(err)
+                alert(err)
+            }
         }
         send()
         

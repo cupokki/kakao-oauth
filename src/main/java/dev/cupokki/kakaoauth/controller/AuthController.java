@@ -40,6 +40,6 @@ public class AuthController {
     @PostMapping("/auth/social-login")
     public ResponseEntity<?> socialLogin(@RequestBody UserLoginRequest userLoginRequest) throws ParseException, IOException, JOSEException {
         var accessToken = authService.socialLogin(userLoginRequest);
-        return ResponseEntity.ok(Map.of("accessToken", accessToken));
+        return ResponseEntity.ok(accessToken);
     }
 }

@@ -14,8 +14,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "social_accounts")
 public class SocialAccount {
 
-    @jakarta.persistence.Id
-    private Long Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;

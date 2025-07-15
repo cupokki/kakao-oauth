@@ -32,10 +32,15 @@ public class User implements UserDetails {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<SocialAccount> socialAccounts = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
+    }
+
+    public void addSocialAcount(SocialAccount savedSocialAccount) {
+        this.socialAccounts.add(savedSocialAccount);
     }
 }

@@ -8,7 +8,9 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jwt.SignedJWT;
 import dev.cupokki.kakaoauth.dto.KakaoTokenResponse;
 import dev.cupokki.kakaoauth.dto.UserLoginRequest;
+import dev.cupokki.kakaoauth.dto.UserLoginResponse;
 import dev.cupokki.kakaoauth.dto.UserSignupRequest;
+import dev.cupokki.kakaoauth.entity.SocialAccount;
 import dev.cupokki.kakaoauth.entity.SocialType;
 import dev.cupokki.kakaoauth.entity.User;
 import dev.cupokki.kakaoauth.exception.CustomException;
@@ -22,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -53,6 +56,7 @@ public class AuthService {
         return jwtTokenProvider.generate(foundUser.getId());
     }
 
+    @Transactional
     public String signup(UserSignupRequest userSignupRequest) {
         if (userRepository.existsByUsername(userSignupRequest.getUsername())) {
             throw new RuntimeException("사용할 수 없는 아이디입니다.");
@@ -68,23 +72,50 @@ public class AuthService {
                 .email(userSignupRequest.getEmail())
                 .build());
 
+        var savedSocialAccount = socialAccountRepository.save(SocialAccount.builder()
+                .user(savedUser)
+                .socialType(userSignupRequest.getSocialType())
+                .socialId(userSignupRequest.getSocialId())
+                .build());
+
+        savedUser.addSocialAcount(savedSocialAccount);
+
         return jwtTokenProvider.generate(savedUser.getId());
     }
 
-    public String socialLogin(UserLoginRequest userLoginRequest) {
+    /**
+     * 소셜 로그인
+     * @param userLoginRequest
+     * @return
+     */
+    public UserLoginResponse socialLogin(UserLoginRequest userLoginRequest) {
         String token = "";
+        boolean isRegistered = true;
+        String socialId = "";
         switch(userLoginRequest.getSocialType()) {
             case SocialType.KAKAO:
                 var kakaoTokenResponse = getKakaoToken(userLoginRequest.getCode());
-                var kakaoUserId = getKakaoUserId(kakaoTokenResponse.getAccessToken());
-                var socialAccount = socialAccountRepository.findBySocialId(kakaoUserId)
-                        .orElseThrow(() -> new CustomException("미가입자", HttpStatus.NO_CONTENT));
-                var user = socialAccount.getUser();
+                socialId = getKakaoUserId(kakaoTokenResponse.getAccessToken());
+                log.info(socialId);
+                var socialAccount = socialAccountRepository.findBySocialId(socialId);
+//                        .orElseThrow(() -> new CustomException("미가입자", HttpStatus.NO_CONTENT));
+                if(socialAccount.isEmpty()) {
+                    isRegistered = false;
+                    break;
+                }
+                var user = socialAccount.get().getUser();
+                log.info(user.getId().toString());
                 token = jwtTokenProvider.generate(user.getId());
             default:
         }
-        return token;
+        return UserLoginResponse.builder()
+                .isRegistered(isRegistered)
+                .accessToken(token)
+                .socialType(userLoginRequest.getSocialType())
+                .socialId(socialId)
+                .build();
     }
+
     public KakaoTokenResponse getKakaoToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://kauth.kakao.com/oauth/token";
