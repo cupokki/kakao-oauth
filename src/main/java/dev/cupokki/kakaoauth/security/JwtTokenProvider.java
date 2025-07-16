@@ -1,5 +1,6 @@
 package dev.cupokki.kakaoauth.security;
 
+import dev.cupokki.kakaoauth.config.JwtProperties;
 import dev.cupokki.kakaoauth.entity.User;
 import dev.cupokki.kakaoauth.repository.UserRepository;
 import dev.cupokki.kakaoauth.service.CustomUserDetailsService;
@@ -25,22 +26,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JwtTokenProvider implements AuthenticationProvider {
 
-    private final static Long TOKEN_EXP = 60 * 15L;
-    private final String secretKey = "1231234guihbasd89y12h2b3kjasjd09u12h3j12312asoifoih123";
+    private final JwtProperties jwtProperties;
     private final CustomUserDetailsService userDetailsService;
 
     public String generate(Long userId) {
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
-                .setExpiration(Date.from(Instant.now().plusSeconds(TOKEN_EXP)))
+                .setExpiration(Date.from(Instant.now().plusSeconds(jwtProperties.getTokenExp())))
                 .setSubject(userId.toString())
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
 
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(jwtProperties.getSecretKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

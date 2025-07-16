@@ -16,3 +16,7 @@ spring:
       console:
         enabled: true
         path: "/h2-console"
+
+jwt:
+  secretKey: "1231234guihbasd89y12h2b3kjasjd09u12h3j12312asoifoih123"
+  tokenExp: 900
